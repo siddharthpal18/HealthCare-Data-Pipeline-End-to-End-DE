@@ -1,0 +1,15 @@
+{
+	"name": "Siddharth-DataFactory1",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "canadacentral",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "dd20ce77-2cf1-42cc-9254-308b2a59c388",
+		"tenantId": "5e4899f3-2232-407c-9357-757830b2ea89"
+	}
+}
