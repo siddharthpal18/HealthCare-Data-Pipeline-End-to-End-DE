@@ -1,0 +1,12 @@
+{
+	"name": "AzureSynapseArtifacts1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSynapseArtifacts",
+		"typeProperties": {
+			"endpoint": "https://siddharth-synapse1.dev.azuresynapse.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/abf8d986-e9a8-42c9-aa48-fbd2cfd45cd9/resourceGroups/Siddharth_RG/providers/Microsoft.Synapse/workspaces/siddharth-synapse1"
+		}
+	}
+}
