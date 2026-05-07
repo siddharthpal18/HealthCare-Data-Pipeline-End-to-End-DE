@@ -1,0 +1,19 @@
+{
+	"name": "HealthDatacsv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "healthcare_data.csv",
+				"folderPath": "Healthcare_Dataset",
+				"fileSystem": "bronze"
+			}
+		}
+	}
+}

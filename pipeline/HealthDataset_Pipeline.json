@@ -16,16 +16,13 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "DelimitedTextSource",
+						"type": "BinarySource",
 						"storeSettings": {
 							"type": "HttpReadSettings",
 							"requestMethod": "GET"
 						},
 						"formatSettings": {
-							"type": "DelimitedTextReadSettings",
-							"compressionProperties": {
-								"type": "ZipDeflateReadSettings"
-							}
+							"type": "BinaryReadSettings"
 						}
 					},
 					"sink": {
@@ -39,13 +36,13 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "HealthcareData",
+						"referenceName": "HealthBinary",
 						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
 					{
-						"referenceName": "healthCaredataset",
+						"referenceName": "HealthDatacsv",
 						"type": "DatasetReference"
 					}
 				]
