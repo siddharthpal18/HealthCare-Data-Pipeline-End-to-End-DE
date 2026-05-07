@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "Siddharth-DataFactory1"
+		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://adlstoragesiddharth.dfs.core.windows.net/"
+		},
+		"AzureDatabricksLS_properties_typeProperties_existingClusterId": {
+			"value": "0503-184439-1wmipfhe"
+		},
+		"AzureKeyVault_properties_typeProperties_baseUrl": {
+			"value": "https://project1db.vault.azure.net/"
+		},
+		"HttpServerLS_properties_typeProperties_url": {
+			"value": "https://www.kaggle.com/api/v1/"
+		},
+		"HttpServerLS_properties_typeProperties_userName": {
+			"value": "siddharthpal121"
+		}
+	}
+}
