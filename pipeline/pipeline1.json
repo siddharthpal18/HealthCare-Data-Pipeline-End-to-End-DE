@@ -58,6 +58,42 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "Notebook1",
+				"type": "SynapseNotebook",
+				"dependsOn": [
+					{
+						"activity": "FinancialDataCopy",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": {
+							"value": "apachesparkpool",
+							"type": "Expression"
+						},
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"driverSize": "Small"
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseArtifacts1",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"annotations": []
