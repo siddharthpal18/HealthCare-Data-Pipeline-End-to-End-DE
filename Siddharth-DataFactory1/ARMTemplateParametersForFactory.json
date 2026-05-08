@@ -17,6 +17,15 @@
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://project1db.vault.azure.net/"
 		},
+		"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
+			"value": "https://siddharth-synapse1.dev.azuresynapse.net"
+		},
+		"HttpServerGith_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
+		"HttpServerGith_properties_typeProperties_userName": {
+			"value": "siddharthpal18"
+		},
 		"HttpServerLS_properties_typeProperties_url": {
 			"value": "https://www.kaggle.com/api/v1/"
 		},

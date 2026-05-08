@@ -23,6 +23,18 @@
 			"type": "string",
 			"defaultValue": "https://project1db.vault.azure.net/"
 		},
+		"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
+			"type": "string",
+			"defaultValue": "https://siddharth-synapse1.dev.azuresynapse.net"
+		},
+		"HttpServerGith_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/"
+		},
+		"HttpServerGith_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "siddharthpal18"
+		},
 		"HttpServerLS_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://www.kaggle.com/api/v1/"
@@ -67,8 +79,17 @@
 					"AzureKeyVault_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault_properties_typeProperties_baseUrl')]"
 					},
+					"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
+						"value": "[parameters('AzureSynapseArtifacts1_properties_typeProperties_endpoint')]"
+					},
 					"AzureDatabricksLS_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('AzureDatabricksLS_properties_typeProperties_existingClusterId')]"
+					},
+					"HttpServerGith_properties_typeProperties_url": {
+						"value": "[parameters('HttpServerGith_properties_typeProperties_url')]"
+					},
+					"HttpServerGith_properties_typeProperties_userName": {
+						"value": "[parameters('HttpServerGith_properties_typeProperties_userName')]"
 					},
 					"HttpServerLS_properties_typeProperties_url": {
 						"value": "[parameters('HttpServerLS_properties_typeProperties_url')]"

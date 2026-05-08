@@ -19,9 +19,21 @@
 			"type": "string",
 			"defaultValue": "https://project1db.vault.azure.net/"
 		},
+		"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
+			"type": "string",
+			"defaultValue": "https://siddharth-synapse1.dev.azuresynapse.net"
+		},
 		"AzureDatabricksLS_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0503-184439-1wmipfhe"
+		},
+		"HttpServerGith_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://raw.githubusercontent.com/"
+		},
+		"HttpServerGith_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "siddharthpal18"
 		},
 		"HttpServerLS_properties_typeProperties_url": {
 			"type": "string",
@@ -67,28 +79,19 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/FinancialDataset')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseArtifacts1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureDataLakeStorage1",
-					"type": "LinkedServiceReference"
-				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "AzureSynapseArtifacts",
 				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileName": "bankchurn.csv",
-						"folderPath": "creditcard_dataset",
-						"fileSystem": "bronze"
-					}
+					"endpoint": "[parameters('AzureSynapseArtifacts1_properties_typeProperties_endpoint')]",
+					"authentication": "MSI",
+					"workspaceResourceId": "/subscriptions/abf8d986-e9a8-42c9-aa48-fbd2cfd45cd9/resourceGroups/Siddharth_RG/providers/Microsoft.Synapse/workspaces/siddharth-synapse1"
 				}
 			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
-			]
+			"dependsOn": []
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/HealthDatacsv')]",
@@ -115,6 +118,128 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/financedata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "bankchurn.csv",
+						"folderPath": "creditcard_dataset",
+						"fileSystem": "bronze"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "CLIENTNUM",
+						"type": "String"
+					},
+					{
+						"name": "Attrition_Flag",
+						"type": "String"
+					},
+					{
+						"name": "Customer_Age",
+						"type": "String"
+					},
+					{
+						"name": "Gender",
+						"type": "String"
+					},
+					{
+						"name": "Dependent_count",
+						"type": "String"
+					},
+					{
+						"name": "Education_Level",
+						"type": "String"
+					},
+					{
+						"name": "Marital_Status",
+						"type": "String"
+					},
+					{
+						"name": "Income_Category",
+						"type": "String"
+					},
+					{
+						"name": "Card_Category",
+						"type": "String"
+					},
+					{
+						"name": "Months_on_book",
+						"type": "String"
+					},
+					{
+						"name": "Total_Relationship_Count",
+						"type": "String"
+					},
+					{
+						"name": "Months_Inactive_12_mon",
+						"type": "String"
+					},
+					{
+						"name": "Contacts_Count_12_mon",
+						"type": "String"
+					},
+					{
+						"name": "Credit_Limit",
+						"type": "String"
+					},
+					{
+						"name": "Total_Revolving_Bal",
+						"type": "String"
+					},
+					{
+						"name": "Avg_Open_To_Buy",
+						"type": "String"
+					},
+					{
+						"name": "Total_Amt_Chng_Q4_Q1",
+						"type": "String"
+					},
+					{
+						"name": "Total_Trans_Amt",
+						"type": "String"
+					},
+					{
+						"name": "Total_Trans_Ct",
+						"type": "String"
+					},
+					{
+						"name": "Total_Ct_Chng_Q4_Q1",
+						"type": "String"
+					},
+					{
+						"name": "Avg_Utilization_Ratio",
+						"type": "String"
+					},
+					{
+						"name": "Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1",
+						"type": "String"
+					},
+					{
+						"name": "Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDatabricksLS')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -132,6 +257,32 @@
 						"secretName": "databricks"
 					},
 					"existingClusterId": "[parameters('AzureDatabricksLS_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/HttpServerGith')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "HttpServer",
+				"typeProperties": {
+					"url": "[parameters('HttpServerGith_properties_typeProperties_url')]",
+					"enableServerCertificateValidation": true,
+					"authenticationType": "Basic",
+					"userName": "[parameters('HttpServerGith_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "github"
+					}
 				}
 			},
 			"dependsOn": [
@@ -165,28 +316,30 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/FinancialBinary')]",
+			"name": "[concat(parameters('factoryName'), '/Financialdatagithub')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "HttpServerLS",
+					"referenceName": "HttpServerGith",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Binary",
+				"type": "DelimitedText",
 				"typeProperties": {
 					"location": {
 						"type": "HttpServerLocation",
-						"relativeUrl": "datasets/download/sakshigoyal7/credit-card-customers"
+						"relativeUrl": "siddharthpal18/datasets/main/BankChurners.csv"
 					},
-					"compression": {
-						"type": "ZipDeflate"
-					}
-				}
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HttpServerLS')]"
+				"[concat(variables('factoryId'), '/linkedServices/HttpServerGith')]"
 			]
 		},
 		{
@@ -351,37 +504,46 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "BinarySource",
+								"type": "DelimitedTextSource",
 								"storeSettings": {
 									"type": "HttpReadSettings",
 									"requestMethod": "GET"
 								},
 								"formatSettings": {
-									"type": "BinaryReadSettings",
-									"compressionProperties": {
-										"type": "ZipDeflateReadSettings"
-									}
+									"type": "DelimitedTextReadSettings"
 								}
 							},
 							"sink": {
-								"type": "BinarySink",
+								"type": "DelimitedTextSink",
 								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "FlattenHierarchy"
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
 								}
 							},
-							"enableStaging": false
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
 						},
 						"inputs": [
 							{
-								"referenceName": "FinancialBinary",
+								"referenceName": "Financialdatagithub",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "FinancialDataset",
+								"referenceName": "financedata",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -394,8 +556,8 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/FinancialBinary')]",
-				"[concat(variables('factoryId'), '/datasets/FinancialDataset')]"
+				"[concat(variables('factoryId'), '/datasets/Financialdatagithub')]",
+				"[concat(variables('factoryId'), '/datasets/financedata')]"
 			]
 		}
 	]
