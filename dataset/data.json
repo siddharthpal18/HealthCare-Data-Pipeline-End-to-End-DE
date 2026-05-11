@@ -1,0 +1,37 @@
+{
+	"name": "data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Financial_Transaction_Fraud_Dataset",
+				"fileSystem": "gold"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "CARD_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CUSTOMER_ID",
+				"type": "INT32"
+			},
+			{
+				"name": "CARD_TYPE",
+				"type": "UTF8"
+			},
+			{
+				"name": "VALID_FROM",
+				"type": "DATE"
+			}
+		]
+	}
+}
