@@ -1,0 +1,23 @@
+{
+	"name": "AzureSqlDatabaseLS",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "sqldbc37.database.windows.net",
+			"database": "fraud_transaction_dataset",
+			"encrypt": "mandatory",
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "siddharthdb",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "azsqldb"
+			}
+		}
+	}
+}
