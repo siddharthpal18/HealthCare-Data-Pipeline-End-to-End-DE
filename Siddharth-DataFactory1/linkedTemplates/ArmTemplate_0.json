@@ -592,7 +592,7 @@
 						}
 					},
 					{
-						"name": "Notebook1",
+						"name": "majorTransfomation",
 						"type": "SynapseNotebook",
 						"dependsOn": [
 							{
@@ -621,7 +621,56 @@
 							"snapshot": true,
 							"sparkPool": {
 								"referenceName": {
-									"value": "pool2",
+									"value": "sparkpool",
+									"type": "Expression"
+								},
+								"type": "BigDataPoolReference"
+							},
+							"executorSize": "Small",
+							"conf": {
+								"spark.dynamicAllocation.enabled": false,
+								"spark.dynamicAllocation.minExecutors": 1,
+								"spark.dynamicAllocation.maxExecutors": 1
+							},
+							"driverSize": "Small",
+							"numExecutors": 1
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSynapseArtifacts1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "ml_notebook",
+						"type": "SynapseNotebook",
+						"dependsOn": [
+							{
+								"activity": "majorTransfomation",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": {
+									"value": "ml_notebook",
+									"type": "Expression"
+								},
+								"type": "NotebookReference"
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": {
+									"value": "sparkpool",
 									"type": "Expression"
 								},
 								"type": "BigDataPoolReference"
