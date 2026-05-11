@@ -23,6 +23,18 @@
 			"type": "string",
 			"defaultValue": "https://project1db.vault.azure.net/"
 		},
+		"AzureSqlDatabaseLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sqldbc37.database.windows.net"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "fraud_transaction_dataset"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "siddharthdb"
+		},
 		"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
 			"type": "string",
 			"defaultValue": "https://siddharth-synapse1.dev.azuresynapse.net"
@@ -84,6 +96,15 @@
 					},
 					"AzureDatabricksLS_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('AzureDatabricksLS_properties_typeProperties_existingClusterId')]"
+					},
+					"AzureSqlDatabaseLS_properties_typeProperties_server": {
+						"value": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_server')]"
+					},
+					"AzureSqlDatabaseLS_properties_typeProperties_database": {
+						"value": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_database')]"
+					},
+					"AzureSqlDatabaseLS_properties_typeProperties_userName": {
+						"value": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_userName')]"
 					},
 					"HttpServerGith_properties_typeProperties_url": {
 						"value": "[parameters('HttpServerGith_properties_typeProperties_url')]"

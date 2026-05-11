@@ -17,6 +17,15 @@
 		"AzureKeyVault_properties_typeProperties_baseUrl": {
 			"value": "https://project1db.vault.azure.net/"
 		},
+		"AzureSqlDatabaseLS_properties_typeProperties_server": {
+			"value": "sqldbc37.database.windows.net"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_database": {
+			"value": "fraud_transaction_dataset"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_userName": {
+			"value": "siddharthdb"
+		},
 		"AzureSynapseArtifacts1_properties_typeProperties_endpoint": {
 			"value": "https://siddharth-synapse1.dev.azuresynapse.net"
 		},

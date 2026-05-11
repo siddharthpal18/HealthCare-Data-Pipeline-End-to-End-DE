@@ -27,6 +27,18 @@
 			"type": "string",
 			"defaultValue": "0503-184439-1wmipfhe"
 		},
+		"AzureSqlDatabaseLS_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "sqldbc37.database.windows.net"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "fraud_transaction_dataset"
+		},
+		"AzureSqlDatabaseLS_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "siddharthdb"
+		},
 		"HttpServerGith_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://raw.githubusercontent.com/"
@@ -118,7 +130,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/financedata')]",
+			"name": "[concat(parameters('factoryName'), '/data')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -127,113 +139,57 @@
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "Parquet",
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "bankchurn.csv",
-						"folderPath": "creditcard_dataset",
-						"fileSystem": "bronze"
+						"folderPath": "Financial_Transaction_Fraud_Dataset",
+						"fileSystem": "gold"
 					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
+					"compressionCodec": "snappy"
 				},
 				"schema": [
 					{
-						"name": "CLIENTNUM",
-						"type": "String"
+						"name": "CARD_ID",
+						"type": "INT32"
 					},
 					{
-						"name": "Attrition_Flag",
-						"type": "String"
+						"name": "CUSTOMER_ID",
+						"type": "INT32"
 					},
 					{
-						"name": "Customer_Age",
-						"type": "String"
+						"name": "CARD_TYPE",
+						"type": "UTF8"
 					},
 					{
-						"name": "Gender",
-						"type": "String"
-					},
-					{
-						"name": "Dependent_count",
-						"type": "String"
-					},
-					{
-						"name": "Education_Level",
-						"type": "String"
-					},
-					{
-						"name": "Marital_Status",
-						"type": "String"
-					},
-					{
-						"name": "Income_Category",
-						"type": "String"
-					},
-					{
-						"name": "Card_Category",
-						"type": "String"
-					},
-					{
-						"name": "Months_on_book",
-						"type": "String"
-					},
-					{
-						"name": "Total_Relationship_Count",
-						"type": "String"
-					},
-					{
-						"name": "Months_Inactive_12_mon",
-						"type": "String"
-					},
-					{
-						"name": "Contacts_Count_12_mon",
-						"type": "String"
-					},
-					{
-						"name": "Credit_Limit",
-						"type": "String"
-					},
-					{
-						"name": "Total_Revolving_Bal",
-						"type": "String"
-					},
-					{
-						"name": "Avg_Open_To_Buy",
-						"type": "String"
-					},
-					{
-						"name": "Total_Amt_Chng_Q4_Q1",
-						"type": "String"
-					},
-					{
-						"name": "Total_Trans_Amt",
-						"type": "String"
-					},
-					{
-						"name": "Total_Trans_Ct",
-						"type": "String"
-					},
-					{
-						"name": "Total_Ct_Chng_Q4_Q1",
-						"type": "String"
-					},
-					{
-						"name": "Avg_Utilization_Ratio",
-						"type": "String"
-					},
-					{
-						"name": "Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_1",
-						"type": "String"
-					},
-					{
-						"name": "Naive_Bayes_Classifier_Attrition_Flag_Card_Category_Contacts_Count_12_mon_Dependent_count_Education_Level_Months_Inactive_12_mon_2",
-						"type": "String"
+						"name": "VALID_FROM",
+						"type": "DATE"
 					}
 				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/financecsvdata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "FraudShield_Banking_Data.csv",
+						"folderPath": "Financial Transaction Fraud Dataset",
+						"fileSystem": "bronze"
+					}
+				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
@@ -257,6 +213,34 @@
 						"secretName": "databricks"
 					},
 					"existingClusterId": "[parameters('AzureDatabricksLS_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabaseLS')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_server')]",
+					"database": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": true,
+					"authenticationType": "SQL",
+					"userName": "[parameters('AzureSqlDatabaseLS_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "azsqldb"
+					}
 				}
 			},
 			"dependsOn": [
@@ -316,30 +300,23 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Financialdatagithub')]",
+			"name": "[concat(parameters('factoryName'), '/AzureSqlTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "HttpServerGith",
+					"referenceName": "AzureSqlDatabaseLS",
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "DelimitedText",
+				"type": "AzureSqlTable",
+				"schema": [],
 				"typeProperties": {
-					"location": {
-						"type": "HttpServerLocation",
-						"relativeUrl": "siddharthpal18/datasets/main/BankChurners.csv"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
+					"schema": "dbo"
+				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/HttpServerGith')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabaseLS')]"
 			]
 		},
 		{
@@ -357,6 +334,32 @@
 					"location": {
 						"type": "HttpServerLocation",
 						"relativeUrl": "datasets/prasad22/healthcare-dataset"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/HttpServerLS')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/financebinarydata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "HttpServerLS",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Binary",
+				"typeProperties": {
+					"location": {
+						"type": "HttpServerLocation",
+						"relativeUrl": "datasets/download/algozee/financial-transaction-fraud-dataset"
+					},
+					"compression": {
+						"type": "ZipDeflate",
+						"level": "Optimal"
 					}
 				}
 			},
@@ -504,50 +507,138 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "DelimitedTextSource",
+								"type": "BinarySource",
 								"storeSettings": {
 									"type": "HttpReadSettings",
 									"requestMethod": "GET"
 								},
 								"formatSettings": {
-									"type": "DelimitedTextReadSettings"
+									"type": "BinaryReadSettings",
+									"compressionProperties": {
+										"type": "ZipDeflateReadSettings"
+									}
 								}
 							},
 							"sink": {
-								"type": "DelimitedTextSink",
+								"type": "BinarySink",
 								"storeSettings": {
 									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
 								}
 							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
+							"enableStaging": false
 						},
 						"inputs": [
 							{
-								"referenceName": "Financialdatagithub",
+								"referenceName": "financebinarydata",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "financedata",
+								"referenceName": "financecsvdata",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "MinorTransformations",
+						"type": "SynapseNotebook",
+						"dependsOn": [
+							{
+								"activity": "FinancialDataCopy",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": {
+									"value": "minor_transformations",
+									"type": "Expression"
+								},
+								"type": "NotebookReference"
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": {
+									"value": "sparkpool",
+									"type": "Expression"
+								},
+								"type": "BigDataPoolReference"
+							},
+							"executorSize": "Small",
+							"conf": {
+								"spark.dynamicAllocation.enabled": false,
+								"spark.dynamicAllocation.minExecutors": 1,
+								"spark.dynamicAllocation.maxExecutors": 1
+							},
+							"driverSize": "Small",
+							"numExecutors": 1
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSynapseArtifacts1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "Notebook1",
+						"type": "SynapseNotebook",
+						"dependsOn": [
+							{
+								"activity": "MinorTransformations",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebook": {
+								"referenceName": {
+									"value": "majortransformations",
+									"type": "Expression"
+								},
+								"type": "NotebookReference"
+							},
+							"snapshot": true,
+							"sparkPool": {
+								"referenceName": {
+									"value": "pool2",
+									"type": "Expression"
+								},
+								"type": "BigDataPoolReference"
+							},
+							"executorSize": "Small",
+							"conf": {
+								"spark.dynamicAllocation.enabled": false,
+								"spark.dynamicAllocation.minExecutors": 1,
+								"spark.dynamicAllocation.maxExecutors": 1
+							},
+							"driverSize": "Small",
+							"numExecutors": 1
+						},
+						"linkedServiceName": {
+							"referenceName": "AzureSynapseArtifacts1",
+							"type": "LinkedServiceReference"
+						}
 					}
 				],
 				"policy": {
@@ -556,8 +647,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Financialdatagithub')]",
-				"[concat(variables('factoryId'), '/datasets/financedata')]"
+				"[concat(variables('factoryId'), '/datasets/financebinarydata')]",
+				"[concat(variables('factoryId'), '/datasets/financecsvdata')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseArtifacts1')]"
 			]
 		}
 	]
