@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Financial_Fraud_Transaction_Detection",
 	"properties": {
 		"activities": [
 			{
@@ -79,7 +79,7 @@
 					"snapshot": true,
 					"sparkPool": {
 						"referenceName": {
-							"value": "sparkpool",
+							"value": "pool2",
 							"type": "Expression"
 						},
 						"type": "BigDataPoolReference"
@@ -128,7 +128,7 @@
 					"snapshot": true,
 					"sparkPool": {
 						"referenceName": {
-							"value": "sparkpool",
+							"value": "pool2",
 							"type": "Expression"
 						},
 						"type": "BigDataPoolReference"
@@ -177,7 +177,7 @@
 					"snapshot": true,
 					"sparkPool": {
 						"referenceName": {
-							"value": "sparkpool",
+							"value": "pool2",
 							"type": "Expression"
 						},
 						"type": "BigDataPoolReference"
